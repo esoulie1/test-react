@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { Line as LineChart } from 'react-chartjs';
 
 const csvFile = '/assets/data/data.csv';
@@ -11,7 +12,21 @@ const dataOptions = {
   strokeColor: "rgba(220,220,220,1)",
 };
 
+const testNumber = number => Number.isInteger(parseInt(number, 10)) ? parseInt(number, 10) : null;
+
 class Graph extends PureComponent {
+
+  static propTypes = {
+    match: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+    staticContext: PropTypes.object,
+  };
+
+  static defaultProps = {
+    staticContext: undefined,
+  };
+
   constructor(props) {
     super(props);
 
@@ -21,14 +36,11 @@ class Graph extends PureComponent {
       loading: true,
     };
   }
+
   componentDidMount = async () => {
     const csvText = await fetch(csvFile).then(rep => rep.text());
 
     this._formatedCsv(csvText);
-  }
-
-  _testNumber = (number) => {
-    return Number.isInteger(parseInt(number, 10)) ? parseInt(number, 10) : null;
   }
 
   _formatedData = (csvText) => {
@@ -38,9 +50,9 @@ class Graph extends PureComponent {
       if (index === 0) return tmp;
       else {
         date.push(tmp[0]);
-        credit.push(this._testNumber(tmp[1], 10));
-        debit.push(this._testNumber(tmp[2], 10));
-        balance.push(this._testNumber(tmp[3], 10));
+        credit.push(testNumber(tmp[1], 10));
+        debit.push(testNumber(tmp[2], 10));
+        balance.push(testNumber(tmp[3], 10));
       }
     });
 
@@ -48,7 +60,14 @@ class Graph extends PureComponent {
   }
 
   _formatedCsv = (csvText) => {
-    const { date, credit, debit, balance, labels } = this._formatedData(csvText);
+    const {
+      date: headers,
+      credit,
+      debit,
+      balance,
+      labels,
+    } = this._formatedData(csvText);
+
     const csvData = [
       {
         ...dataOptions,
@@ -64,7 +83,7 @@ class Graph extends PureComponent {
         data: debit,
       },
     ];
-    const headers = date;
+
     const data = csvData;
     this.setState({
       data,
@@ -83,15 +102,19 @@ class Graph extends PureComponent {
     if (loading) {
       return (
         <div className='Graph'>
-          Chargement en cours ...
+          <span>Chargement en cours ...</span>
         </div>
       );
     }
 
     return (
-      <div>
+      <div className='Graph'>
         <h1>Graph Page</h1>
-        <LineChart data={chartData} options={{}} width={window.innerWidth || 1200} height="300"/>
+        <LineChart
+          data={chartData}
+          options={{}}
+          width={window.innerWidth || 1200}
+          height="300"/>
       </div>
     );
   }

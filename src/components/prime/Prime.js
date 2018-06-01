@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import Form from 'components/base/Form';
 import Result from 'components/base/Result';
@@ -6,6 +7,18 @@ import Result from 'components/base/Result';
 import primeNumbers from 'data/primeNumbers';
 
 class Prime extends PureComponent {
+
+  static propTypes = {
+    match: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+    staticContext: PropTypes.object,
+  };
+
+  static defaultProps = {
+    staticContext: undefined,
+  };
+
   constructor(props) {
     super(props);
 
