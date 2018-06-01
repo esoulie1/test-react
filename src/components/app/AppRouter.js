@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import Music from 'components/music/Music';
+import Music from 'containers/MusicContainer';
 import Prime from 'components/prime/Prime';
 import Graph from 'components/graph/Graph';
 
