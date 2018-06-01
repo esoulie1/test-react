@@ -1,19 +1,18 @@
 import React, { PureComponent } from 'react';
-import './App.css';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-class App extends PureComponent {
+import Prime from 'components/prime/Prime';
+
+class AppRouter extends PureComponent {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <Router>
+        <Switch>
+          <Route path='/prime' component={Prime} exact/>
+        </Switch>
+      </Router>
     );
   }
 }
 
-export default App;
+export default AppRouter;
